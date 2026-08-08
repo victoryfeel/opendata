@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
     return -1;
   }
 
-  // TODO：3-连接共享内存到当前的进程地址空间
+  // TODO: 3-连接共享内存到当前的进程地址空间
   st_procinfo* shm = reinterpret_cast<st_procinfo*>(shmat(shmid, nullptr, 0));
 
   // TODO: 4-遍历共享内存中的所有服务程序，检查它们是否超时，如果超时就终止它们

@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) {
     cout << "logfile.open(" << argv[3] << ") failed.\n";
     return -1;
   }
-  logfile.write("crtsurfdata 开始运行。\n");
+  logfile.write("%s", "crtsurfdata 开始运行。\n");
 
   //////////////////////////////////////////////////////
   // 1-加载站点参数
@@ -96,7 +96,7 @@ int main(int argc, char* argv[]) {
     crtsurffile(argv[2], "json");
   }
 
-  logfile.write("crtsurfdata 运行结束。\n");
+  logfile.write("%s", "crtsurfdata 运行结束。\n");
   return 0;
 }
 
@@ -196,11 +196,11 @@ bool crtsurffile(const string& outpath, const string& datafmt) {
   }
   // 将datalist容器中的观测数据写入成csv,xml,json三种格式的文件
   if (datafmt == "csv")
-    ofile.writeline("站点代码,数据时间,气温,气压,相对湿度,风向,风速,降雨量,能见度\n");
+    ofile.writeline("%s", "站点代码,数据时间,气温,气压,相对湿度,风向,风速,降雨量,能见度\n");
   if (datafmt == "xml")
-    ofile.writeline("<data>\n");
+    ofile.writeline("%s", "<data>\n");
   if (datafmt == "json")
-    ofile.writeline("{\"data\":[\n");
+    ofile.writeline("%s", "{\"data\":[\n");
 
   for (auto& aa : datalist) {
     if (datafmt == "csv") {
@@ -250,20 +250,20 @@ bool crtsurffile(const string& outpath, const string& datafmt) {
       static int ii = 0;
       if (ii < datalist.size() - 1) {
         // 不是最后一个记录，写入逗号并换行
-        ofile.writeline(",\n");
+        ofile.writeline("%s", ",\n");
         ii++;
       } else {
-        ofile.writeline("\n");
+        ofile.writeline("%s", "\n");
       }
     }
   }
 
   // 写入xml结束标签
   if (datafmt == "xml")
-    ofile.writeline("</data>\n");
+    ofile.writeline("%s", "</data>\n");
   // 写入json结束标签
   if (datafmt == "json")
-    ofile.writeline("]}\n");
+    ofile.writeline("%s", "]}\n");
 
   ofile.closeandrename();
 

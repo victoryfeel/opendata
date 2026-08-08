@@ -27,32 +27,29 @@ int main(int argc, char* argv[]) {
   //               3）tcp连接已断开（对端调用close()函数关闭了连接）。
   // 写事件：发送缓冲区没有满，可以写入数据（可以向对端发送报文）。
 
-  fd_set readfds;               // 需要监视读事件的socket的集合，大小为16字节（1024位）的bitmap。
-  FD_ZERO(&readfds);            // 初始化readfds，把bitmap的每一位都置为0。
-  FD_SET(listensock, &readfds); // 把服务端用于监听的socket加入readfds。
+  fd_set readfds;
+  FD_ZERO(&readfds);
+  FD_SET(listensock, &readfds);
 
-  int maxfd = listensock; // readfds中socket的最大值。
+  int maxfd = listensock;
 
-  while (true) // 事件循环。
-  {
+  while (true) {
     // 用于表示超时时间的结构体。
     struct timeval timeout;
     timeout.tv_sec = 10; // 秒
     timeout.tv_usec = 0; // 微秒。
 
-    fd_set tmpfds =
-      readfds; // 在select()函数中，会修改bitmap，所以，要把readfds复制一份给tmpfds，再把tmpfds传给select()。
+    // 在select()函数中，会修改bitmap，所以，要把readfds复制一份给tmpfds，再把tmpfds传给select()。
+    fd_set tmpfds = readfds;
 
     // 调用select() 等待事件的发生（监视哪些socket发生了事件)。
-    int infds = select(maxfd + 1, &tmpfds, NULL, NULL, 0);
+    int infds = select(maxfd + 1, &tmpfds, nullptr, nullptr, nullptr);
 
-    // 如果infds<0，表示调用select()失败。
+    // 失败或超时
     if (infds < 0) {
       perror("select() failed");
       break;
     }
-
-    // 如果infds==0，表示select()超时。
     if (infds == 0) {
       printf("select() timeout.\n");
       continue;
@@ -72,13 +69,13 @@ int main(int argc, char* argv[]) {
           perror("accept() failed");
           continue;
         }
-
         printf("accept client(socket=%d) ok.\n", clientsock);
 
         FD_SET(clientsock, &readfds); // 把bitmap中新连上来的客户端的标志位置为1。
 
-        if (maxfd < clientsock)
+        if (maxfd < clientsock) {
           maxfd = clientsock; // 更新maxfd的值。
+        }
       } else {
         // 如果是客户端连接的socke有事件，表示接收缓存中有数据可以读（对端发送的报文已到达），或者有客户端已断开连接。
         char buffer[1024]; // 存放从接收缓冲区中读取的数据。
@@ -91,8 +88,8 @@ int main(int argc, char* argv[]) {
 
           FD_CLR(eventfd, &readfds); // 把bitmap中已关闭客户端的标志位清空。
 
-          if (eventfd == maxfd) // 重新计算maxfd的值，注意，只有当eventfd==maxfd时才需要计算。
-          {
+          // 重新计算maxfd的值，注意，只有当eventfd==maxfd时才需要计算。
+          if (eventfd == maxfd) {
             for (int ii = maxfd; ii > 0; ii--) // 从后面往前找。
             {
               if (FD_ISSET(ii, &readfds)) {

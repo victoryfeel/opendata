@@ -49,6 +49,12 @@ deletetable:deletetable.cpp
 migratetable:migratetable.cpp _tools.cpp
 	g++ $(CFLAGS) migratetable.cpp _tools.cpp -o migratetable $(PUBINCL) $(PUBCPP) $(ORAINCL) $(ORALIB) $(ORALIBS) $(ORACPP)
 	mv -f migratetable ../bin/.
+syncref:syncref.cpp _tools.cpp
+	g++ $(CFLAGS) -o syncref syncref.cpp $(PUBINCL) $(PUBCPP) $(ORAINCL)  $(ORALIB) $(ORALIBS) $(ORACPP) _tools.cpp
+	cp -f syncref ../bin/.
+syncinc:syncinc.cpp _tools.cpp
+	g++ $(CFLAGS) -o syncinc syncinc.cpp $(PUBINCL) $(PUBCPP) $(ORAINCL)  $(ORALIB) $(ORALIBS) $(ORACPP) _tools.cpp
+	cp -f syncinc ../bin/.
 
 clean:
 	rm -rf ../bin/*

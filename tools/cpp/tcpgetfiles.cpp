@@ -81,7 +81,7 @@ int main(int argc, char* argv[]) {
 
   // 登录业务。
   if (login(argv[2]) == false) {
-    logfile.write("login() failed.\n");
+    logfile.write("%s", "login() failed.\n");
     EXIT(-1);
   }
 
@@ -150,31 +150,31 @@ bool _xmltoarg(const char* strxmlbuffer) {
 
   getxmlbuffer(strxmlbuffer, "ip", starg.ip);
   if (strlen(starg.ip) == 0) {
-    logfile.write("ip is null.\n");
+    logfile.write("%s", "ip is null.\n");
     return false;
   }
 
   getxmlbuffer(strxmlbuffer, "port", starg.port);
   if (starg.port == 0) {
-    logfile.write("port is null.\n");
+    logfile.write("%s", "port is null.\n");
     return false;
   }
 
   getxmlbuffer(strxmlbuffer, "ptype", starg.ptype);
   if ((starg.ptype != 1) && (starg.ptype != 2)) {
-    logfile.write("ptype not in (1,2).\n");
+    logfile.write("%s", "ptype not in (1,2).\n");
     return false;
   }
 
   getxmlbuffer(strxmlbuffer, "srvpath", starg.srvpath);
   if (strlen(starg.srvpath) == 0) {
-    logfile.write("srvpath is null.\n");
+    logfile.write("%s", "srvpath is null.\n");
     return false;
   }
 
   getxmlbuffer(strxmlbuffer, "srvpathbak", starg.srvpathbak);
   if ((starg.ptype == 2) && (strlen(starg.srvpathbak) == 0)) {
-    logfile.write("srvpathbak is null.\n");
+    logfile.write("%s", "srvpathbak is null.\n");
     return false;
   }
 
@@ -182,19 +182,19 @@ bool _xmltoarg(const char* strxmlbuffer) {
 
   getxmlbuffer(strxmlbuffer, "matchname", starg.matchname);
   if (strlen(starg.matchname) == 0) {
-    logfile.write("matchname is null.\n");
+    logfile.write("%s", "matchname is null.\n");
     return false;
   }
 
   getxmlbuffer(strxmlbuffer, "clientpath", starg.clientpath);
   if (strlen(starg.clientpath) == 0) {
-    logfile.write("clientpath is null.\n");
+    logfile.write("%s", "clientpath is null.\n");
     return false;
   }
 
   getxmlbuffer(strxmlbuffer, "timetvl", starg.timetvl);
   if (starg.timetvl == 0) {
-    logfile.write("timetvl is null.\n");
+    logfile.write("%s", "timetvl is null.\n");
     return false;
   }
 
@@ -206,7 +206,7 @@ bool _xmltoarg(const char* strxmlbuffer) {
   // 进程心跳的超时时间，一定要大于starg.timetvl。
   getxmlbuffer(strxmlbuffer, "timeout", starg.timeout);
   if (starg.timeout == 0) {
-    logfile.write("timeout is null.\n");
+    logfile.write("%s", "timeout is null.\n");
     return false;
   }
   if (starg.timeout <= starg.timetvl) {
@@ -227,7 +227,7 @@ void _tcpgetfiles() {
 
     // 接收服务端的报文。
     if (tcpclient.read(strrecvbuffer, starg.timetvl + 10) == false) {
-      logfile.write("tcpclient.read() failed.\n");
+      logfile.write("%s", "tcpclient.read() failed.\n");
       return;
     }
     // logfile.write("strrecvbuffer=%s\n",strrecvbuffer.c_str());
@@ -237,7 +237,7 @@ void _tcpgetfiles() {
       strsendbuffer = "ok";
       // xxxxxxxxxxx logfile.write("strsendbuffer=%s\n",strsendbuffer.c_str());
       if (tcpclient.write(strsendbuffer) == false) {
-        logfile.write("tcpclient.write() failed.\n");
+        logfile.write("%s", "tcpclient.write() failed.\n");
         return;
       }
     }
@@ -275,7 +275,7 @@ void _tcpgetfiles() {
       // 把接收结果返回给对端。
       // xxxxxxxxxxx logfile.write("strsendbuffer=%s\n",strsendbuffer.c_str());
       if (tcpclient.write(strsendbuffer) == false) {
-        logfile.write("tcpclient.write() failed.\n");
+        logfile.write("%s", "tcpclient.write() failed.\n");
         return;
       }
     }
